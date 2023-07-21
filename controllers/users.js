@@ -18,6 +18,9 @@ module.exports.getUser = (req, res) => {
   User.findById(userId)
     .then((user) => res.status(OK).send(user))
     .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(BAD_REQUEST_ERROR).send({ message: `Переданы некорректные данные ${BAD_REQUEST_ERROR}` });
+      }
       if (err.name === 'CastError') {
         return res.status(NOT_FOUND_ERROR).send({ message: `Пользователь по указанному id не найден ${NOT_FOUND_ERROR}` });
       }
