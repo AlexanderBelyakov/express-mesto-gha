@@ -1,0 +1,13 @@
+const OK = 200;
+const CREATED = 201;
+const BAD_REQUEST_ERROR = 400;
+const NOT_FOUND_ERROR = 404;
+const INTERVAL_SERVER_ERROR = 500;
+
+module.exports = {
+  OK,
+  CREATED,
+  BAD_REQUEST_ERROR,
+  NOT_FOUND_ERROR,
+  INTERVAL_SERVER_ERROR,
+};
