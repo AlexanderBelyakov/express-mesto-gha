@@ -14,7 +14,7 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  const { _id: userId } = req.user;
+  const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
       if (user) {
@@ -60,7 +60,7 @@ module.exports.updateProfile = (req, res) => {
 };
 
 module.exports.updateAvatar = (req, res) => {
-  const { _id: userId } = req.user;
+  const { userId } = req.params;
   const { avatar } = req.body;
   User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
     .then((user) => res.status(OK).send(user))
