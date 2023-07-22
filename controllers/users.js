@@ -47,7 +47,7 @@ module.exports.updateProfile = (req, res) => {
   const { userId } = req.params;
   const { name, about } = req.body;
   User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
-    .then((user) => res.status(OK).send(user))
+    .then((newData) => res.status(OK).send({ data: newData }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(BAD_REQUEST_ERROR).send({ message: `Переданы некорректные данные при обновлении профиля ${BAD_REQUEST_ERROR}` });
