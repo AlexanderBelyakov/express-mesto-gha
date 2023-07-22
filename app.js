@@ -2,6 +2,8 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 
+const { NOT_FOUND_ERROR } = require('./HHTP_status_codes/HHTP-status-codes');
+
 const { PORT = 3000 } = process.env;
 // Слушаем 3000 порт
 const app = express();
@@ -24,6 +26,11 @@ app.use((req, res, next) => { // Псевдоавторризация
 
   next();
 });
+
+app.use('*', (req, res) => {
+  res.status(NOT_FOUND_ERROR).send({ message: `Страница не найдена ${NOT_FOUND_ERROR}` });
+});
+
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
