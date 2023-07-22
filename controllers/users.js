@@ -53,7 +53,7 @@ module.exports.updateProfile = (req, res) => {
         return res.status(BAD_REQUEST_ERROR).send({ message: `Переданы некорректные данные при обновлении профиля ${BAD_REQUEST_ERROR}` });
       }
       if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_ERROR).send({ message: `Пользователь по указанному id не найден ${NOT_FOUND_ERROR}` });
+        return res.status(BAD_REQUEST_ERROR).send({ message: `Пользователь по указанному id не найден ${BAD_REQUEST_ERROR}` });
       }
       return res.status(INTERVAL_SERVER_ERROR).send({ message: `Ошибка сервера ${INTERVAL_SERVER_ERROR}` });
     });
@@ -69,7 +69,7 @@ module.exports.updateAvatar = (req, res) => {
         return res.status(BAD_REQUEST_ERROR).send({ message: `Переданы некорректные данные при обновлении аватара ${BAD_REQUEST_ERROR}` });
       }
       if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_ERROR).send({ message: `Пользователь по указанному id не найден ${NOT_FOUND_ERROR}` });
+        return res.status(BAD_REQUEST_ERROR).send({ message: `Пользователь по указанному id не найден ${BAD_REQUEST_ERROR}` });
       }
       return res.status(INTERVAL_SERVER_ERROR).send({ message: `Ошибка сервера ${INTERVAL_SERVER_ERROR}` });
     });
