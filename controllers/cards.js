@@ -29,8 +29,13 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
-    .then((card) => res.status(OK).send(card))
-    .catch(() => res.status(NOT_FOUND_ERROR).send({ message: `Карточка с указанным _id не найдена ${NOT_FOUND_ERROR}` }));
+    .then((card) => {
+      if (card) {
+        res.status(OK).send(card);
+      }
+      return res.status(NOT_FOUND_ERROR).send({ message: `Передан id несуществующий карточки ${NOT_FOUND_ERROR}` });
+    })
+    .catch(() => res.status(BAD_REQUEST_ERROR).send({ message: `Карточка с некорректным _id ${BAD_REQUEST_ERROR}` }));
 };
 
 module.exports.likeCard = (req, res) => {
