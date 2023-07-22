@@ -14,7 +14,7 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  const { userId } = req.params;
+  const { _id: userId } = req.user;
   User.findById(userId)
     .then((user) => {
       if (user) {
@@ -44,10 +44,10 @@ module.exports.createUser = (req, res) => {
 };
 
 module.exports.updateProfile = (req, res) => {
-  const { userId } = req.params;
+  const { _id: userId } = req.user;
   const { name, about } = req.body;
   User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
-    .then((newData) => res.status(OK).send({ data: newData }))
+    .then((newData) => { res.status(OK).send(newData); })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(BAD_REQUEST_ERROR).send({ message: `Переданы некорректные данные при обновлении профиля ${BAD_REQUEST_ERROR}` });
@@ -60,7 +60,7 @@ module.exports.updateProfile = (req, res) => {
 };
 
 module.exports.updateAvatar = (req, res) => {
-  const { userId } = req.params;
+  const { _id: userId } = req.user;
   const { avatar } = req.body;
   User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
     .then((user) => res.status(OK).send(user))
