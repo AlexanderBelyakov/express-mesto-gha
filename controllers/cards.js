@@ -55,13 +55,15 @@ module.exports.dislikeCard = (req, res) => {
   const owner = req.user._id;
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: owner } }, { new: true })
-    .then((card) => res.status(OK).send(card))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(BAD_REQUEST_ERROR).send({ message: `Переданы некорректные данные при снятии лайка ${BAD_REQUEST_ERROR}` });
+    .then((card) => {
+      if (card) {
+        res.status(OK).send(card);
       }
-      if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_ERROR).send({ message: `Передан id несуществующий карточки ${NOT_FOUND_ERROR}` });
+      return res.status(NOT_FOUND_ERROR).send({ message: `Передан id несуществующий карточки ${NOT_FOUND_ERROR}` });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        return res.status(BAD_REQUEST_ERROR).send({ message: `Переданы некорректные данные при удалении лайка ${BAD_REQUEST_ERROR}` });
       }
       return res.status(INTERVAL_SERVER_ERROR).send({ message: `Ошибка сервера ${INTERVAL_SERVER_ERROR}` });
     });
