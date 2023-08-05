@@ -51,7 +51,13 @@ module.exports.createUser = (req, res, next) => {
       email: req.body.email,
       password: hash,
     })
-      .then((user) => res.status(CREATED).send(user))
+      .then((user) => res.status(CREATED).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+        _id: user._id,
+      }))
       .catch((err) => {
         if (err.code === 11000) {
           next(new ConflictError(`Указанный email занят другим пользователем ${CONFLICT_ERROR}`));
@@ -83,13 +89,7 @@ module.exports.updateAvatar = (req, res, next) => {
   const owner = req.user._id;
   const { avatar } = req.body;
   User.findByIdAndUpdate(owner, { avatar }, { new: true, runValidators: true })
-    .then((user) => res.status(OK).send({
-      name: user.name,
-      about: user.about,
-      avatar: user.avatar,
-      email: user.email,
-      _id: user._id,
-    }))
+    .then((user) => res.status(OK).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(`Переданы некорректные данные при обновлении аватара ${BAD_REQUEST_ERROR}`));
